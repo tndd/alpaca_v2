@@ -139,6 +139,7 @@ class AgentAlpacaApi:
                 time_end,
                 next_page_token
             )
+            # temporary solution to the problem the return value of bars may be None.
             if bars['bars'] is not None:
                 bars_all.extend(bars['bars'])
             next_page_token = bars['next_page_token']
