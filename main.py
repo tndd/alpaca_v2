@@ -4,7 +4,7 @@ import os
 import requests
 from dotenv import load_dotenv
 from enum import Enum
-from typing import Optional
+from typing import List, Optional
 
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.cursor import MySQLCursor
@@ -122,12 +122,37 @@ class AgentAlpacaApi:
         return r.json()
 
 
+    def request_bars_all(
+        self,
+        timeframe: TimeFrame,
+        symbol: str,
+        time_start: str,
+        time_end: str,
+    ) -> List[dict]:
+        next_page_token = None
+        bars_all = []
+        while True:
+            bars = self.request_bars(
+                timeframe,
+                symbol,
+                time_start,
+                time_end,
+                next_page_token
+            )
+            if bars['bars'] is not None:
+                bars_all.extend(bars['bars'])
+            next_page_token = bars['next_page_token']
+            if next_page_token is None:
+                break
+        return bars_all
+
+
 if __name__ == '__main__':
     agent_alpaca = AgentAlpacaApi()
-    d = agent_alpaca.request_bars(
+    d = agent_alpaca.request_bars_all(
         timeframe=TimeFrame.DAY_1,
         symbol='GLD',
-        time_start='2021-08-01',
-        time_end='2021-10-01'
+        time_start='2021-10-01',
+        time_end='2021-10-12'
     )
     print(d)
