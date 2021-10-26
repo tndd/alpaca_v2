@@ -56,6 +56,11 @@ class PublisherQuery:
         path = './sql/create/bars_1min.sql'
         return cls._load_query_from_file(path)
 
+    @classmethod
+    def create_table_bars_1day(cls) -> str:
+        path = './sql/create/bars_1day.sql'
+        return cls._load_query_from_file(path)
+
 
 class AgentDB:
     def __init__(
@@ -76,7 +81,9 @@ class AgentDB:
         self.acr_db.cur.execute(f'USE {database};')
         # create tables
         q_bars_1min = PublisherQuery.create_table_bars_1min()
+        q_bars_1day = PublisherQuery.create_table_bars_1day()
         self.acr_db.cur.execute(q_bars_1min)
+        self.acr_db.cur.execute(q_bars_1day)
 
 
 if __name__ == '__main__':
