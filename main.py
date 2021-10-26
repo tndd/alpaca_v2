@@ -38,7 +38,7 @@ class AccesorDB:
 
 class PublisherQuery:
     @staticmethod
-    def _load_query_from_file(path: str):
+    def _load_query_from_file(path: str) -> str:
         try:
             with open(path, 'r') as f:
                 query = f.read()
