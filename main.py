@@ -44,7 +44,23 @@ class AgentDB:
             self.conn.rollback()
             error(e)
 
+class AgentQuery:
+    @staticmethod
+    def _load_query_from_file(path: str):
+        try:
+            with open(path, 'r') as f:
+                query = f.read()
+        except IOError as e:
+            error(e)
+        return query
+
+    @classmethod
+    def create_database(cls):
+        path = './sql/create/database.sql'
+        return cls._load_query_from_file(path)
 
 if __name__ == '__main__':
-    agent_db = AgentDB()
-    print(agent_db.conn.is_connected())
+    q = AgentQuery.create_database()
+    print(q)
+    # agent_db = AgentDB()
+    # print(agent_db.conn.is_connected())
