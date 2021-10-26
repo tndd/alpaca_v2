@@ -82,6 +82,7 @@ class TimeFrame(Enum):
     HOUR_1 = '1Hour'
     DAY_1 = '1Day'
 
+
 class AgentAlpacaApi:
     def __init__(
         self,
@@ -118,6 +119,7 @@ class AgentAlpacaApi:
             params=query
         )
         return r.json()
+
 
 if __name__ == '__main__':
     agent_alpaca = AgentAlpacaApi()
