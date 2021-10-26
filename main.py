@@ -44,7 +44,7 @@ class AgentDB:
             self.conn.rollback()
             error(e)
 
-class AgentQuery:
+class PublisherQuery:
     @staticmethod
     def _load_query_from_file(path: str):
         try:
@@ -59,8 +59,7 @@ class AgentQuery:
         path = './sql/create/database.sql'
         return cls._load_query_from_file(path)
 
+
 if __name__ == '__main__':
-    q = AgentQuery.create_database()
+    q = PublisherQuery.create_database()
     print(q)
-    # agent_db = AgentDB()
-    # print(agent_db.conn.is_connected())
