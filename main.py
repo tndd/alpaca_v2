@@ -1,7 +1,9 @@
 from logging import error
 import mysql.connector
 import os
+import requests
 from dotenv import load_dotenv
+from enum import Enum
 
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.cursor import MySQLCursor
@@ -74,5 +76,55 @@ class AgentDB:
         self.acr_db.cur.execute(q_bars)
 
 
+class TimeFrame(Enum):
+    MIN_1 = '1Min'
+    MIN_15 = '15Min'
+    HOUR_1 = '1Hour'
+    DAY_1 = '1Day'
+
+class AgentAlpacaApi:
+    def __init__(
+        self,
+        api_key: str = os.getenv('ALPACA_API_KEY'),
+        secret_key: str = os.getenv('ALPACA_SECRET_KEY'),
+        endpoint_market_data: str = os.getenv('ALPACA_ENDPOINT_MARKET_DATA')
+    ) -> None:
+        self.endpoint_market_data = endpoint_market_data
+        self.auth_header = {
+            "APCA-API-KEY-ID": api_key,
+            "APCA-API-SECRET-KEY": secret_key
+        }
+
+    def request_bars(
+        self,
+        timeframe: TimeFrame,
+        symbol: str,
+        time_start: str,
+        time_end: str,
+        page_token: str = ''
+    ) -> dict:
+        url = f"{self.endpoint_market_data}/stocks/{symbol}/bars"
+        query = {
+            'start': time_start,
+            'end': time_end,
+            'timeframe': timeframe.value,
+            'limit': 10000
+        }
+        if page_token != '':
+            query['page_token'] = page_token
+        r = requests.get(
+            url,
+            headers=self.auth_header,
+            params=query
+        )
+        return r.json()
+
 if __name__ == '__main__':
-    agent_db = AgentDB(database='foo')
+    agent_alpaca = AgentAlpacaApi()
+    d = agent_alpaca.request_bars(
+        timeframe=TimeFrame.DAY_1,
+        symbol='GLD',
+        time_start='2021-08-01',
+        time_end='2021-10-01'
+    )
+    print(d)
