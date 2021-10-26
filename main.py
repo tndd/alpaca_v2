@@ -47,8 +47,13 @@ class PublisherQuery:
         return query
 
     @classmethod
-    def create_database(cls):
+    def create_database(cls) -> str:
         path = './sql/create/database.sql'
+        return cls._load_query_from_file(path)
+
+    @classmethod
+    def create_table_bars_1min(cls) -> str:
+        path = './sql/create/bars_1min.sql'
         return cls._load_query_from_file(path)
 
 
@@ -69,6 +74,9 @@ class AgentDB:
         # create database & use
         self.acr_db.cur.execute(f'CREATE DATABASE IF NOT EXISTS {database};')
         self.acr_db.cur.execute(f'USE {database};')
+        # create tables
+        q_bars_1min = PublisherQuery.create_table_bars_1min()
+        self.acr_db.cur.execute(q_bars_1min)
 
 
 if __name__ == '__main__':
