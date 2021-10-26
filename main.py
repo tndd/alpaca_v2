@@ -4,6 +4,7 @@ import os
 import requests
 from dotenv import load_dotenv
 from enum import Enum
+from typing import Optional
 
 from mysql.connector.connection import MySQLConnection
 from mysql.connector.cursor import MySQLCursor
@@ -102,7 +103,7 @@ class AgentAlpacaApi:
         symbol: str,
         time_start: str,
         time_end: str,
-        page_token: str = ''
+        page_token: Optional[str] = None
     ) -> dict:
         url = f"{self.endpoint_market_data}/stocks/{symbol}/bars"
         query = {
@@ -111,7 +112,7 @@ class AgentAlpacaApi:
             'timeframe': timeframe.value,
             'limit': 10000
         }
-        if page_token != '':
+        if page_token is not None:
             query['page_token'] = page_token
         r = requests.get(
             url,
