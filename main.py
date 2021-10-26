@@ -3,46 +3,38 @@ import mysql.connector
 import os
 from dotenv import load_dotenv
 
+from mysql.connector.connection import MySQLConnection
+from mysql.connector.cursor import MySQLCursor
+from mysql.connector.errors import ProgrammingError
+
 load_dotenv()
 
 
-class AgentDB:
+class AccesorDB:
     def __init__(
         self,
-        user: str = os.getenv('DB_USER'),
-        passwd: str = os.getenv('DB_PASSWORD'),
-        host: str = os.getenv('DB_HOST')
+        user: str,
+        passwd: str,
+        host: str
     ) -> None:
         try:
             # create connection
-            self.conn = mysql.connector.connect(
+            self.conn: MySQLConnection = mysql.connector.connect(
                 user=user,
                 password=passwd,
                 host=host
             )
-            self.cur = self.conn.cursor()
+            self.cur: MySQLCursor = self.conn.cursor()
             self.conn.autocommit = False
-        except (mysql.connector.errors.ProgrammingError) as e:
+        except ProgrammingError as e:
             error(e)
 
     def __del__(self) -> None:
         try:
             self.conn.close()
-        except (mysql.connector.errors.ProgrammingError) as e:
+        except ProgrammingError as e:
             error(e)
 
-    def insert_lines(self, query: str, lines: list) -> None:
-        # split lines every 500,000 because of restriction memory limit.
-        chunk = 500000
-        lines_len = len(lines)
-        lines_parts = [lines[i:i + chunk] for i in range(0, lines_len, chunk)]
-        try:
-            for l_part in lines_parts:
-                self.cur.executemany(query, l_part)
-            self.conn.commit()
-        except (mysql.connector.errors.ProgrammingError) as e:
-            self.conn.rollback()
-            error(e)
 
 class PublisherQuery:
     @staticmethod
@@ -60,6 +52,24 @@ class PublisherQuery:
         return cls._load_query_from_file(path)
 
 
+class AgentDB:
+    def __init__(
+        self,
+        user: str = os.getenv('DB_USER'),
+        passwd: str = os.getenv('DB_PASSWORD'),
+        host: str = os.getenv('DB_HOST'),
+        database: str = os.getenv('DB_NAME')
+    ) -> None:
+        # db accesor
+        self.acr_db = AccesorDB(
+            user=user,
+            passwd=passwd,
+            host=host
+        )
+        # create database & use
+        self.acr_db.cur.execute(f'CREATE DATABASE IF NOT EXISTS {database};')
+        self.acr_db.cur.execute(f'USE {database};')
+
+
 if __name__ == '__main__':
-    q = PublisherQuery.create_database()
-    print(q)
+    agent_db = AgentDB(database='foo')
