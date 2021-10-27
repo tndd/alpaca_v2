@@ -1,8 +1,10 @@
 import os
 import requests
+import time
 from dotenv import load_dotenv
 from typing import List, Optional
 from enum import Enum
+from datetime import datetime
 
 from assistant import AccesorDB, PublisherQuery
 
@@ -50,6 +52,7 @@ class AgentAlpacaApi:
             "APCA-API-KEY-ID": api_key,
             "APCA-API-SECRET-KEY": secret_key
         }
+        self.request_limit_per_min = 200
 
     def request_bars_part(
         self,
@@ -85,6 +88,9 @@ class AgentAlpacaApi:
         next_page_token = None
         bars_all = []
         while True:
+            # scice there is a limit to the number of api request.
+            # so time measurement is necessary to limit the number of times sent request.
+            time_start_request = datetime.now()
             bars = self.request_bars_part(
                 timeframe,
                 symbol,
@@ -92,6 +98,11 @@ class AgentAlpacaApi:
                 time_end,
                 next_page_token
             )
+            elasped_time_request = datetime.now() - time_start_request
+            # wait for escape api request limit
+            time_too_early = self.request_limit_per_min - elasped_time_request.total_seconds()
+            if time_too_early > 0:
+                time.sleep(time_too_early)
             # temporary solution to the problem the return value of bars may be None.
             if bars['bars'] is not None:
                 bars_all.extend(bars['bars'])
