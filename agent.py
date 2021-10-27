@@ -99,3 +99,27 @@ class AgentAlpacaApi:
             if next_page_token is None:
                 break
         return bars_all
+
+    def request_bars_payload(
+        self,
+        timeframe: TimeFrame,
+        symbol: str,
+        time_start: str,
+        time_end: str,
+    ) -> List[tuple]:
+        bars = self.request_bars(
+            timeframe,
+            symbol,
+            time_start,
+            time_end
+        )
+        return list(map(lambda bar: ((
+            timeframe.value,
+            symbol,
+            bar['t'],
+            bar['o'],
+            bar['h'],
+            bar['l'],
+            bar['c'],
+            bar['v']
+        )), bars))
