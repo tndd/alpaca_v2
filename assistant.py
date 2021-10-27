@@ -42,7 +42,7 @@ class PublisherQuery:
         return query
 
     @classmethod
-    def create_table_bars(cls) -> str:
+    def create_bars(cls) -> str:
         path = './sql/create/bars.sql'
         return cls._load_query_from_file(path)
 

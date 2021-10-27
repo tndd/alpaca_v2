@@ -29,7 +29,7 @@ class AgentDB:
         self.acr_db.cur.execute(f'CREATE DATABASE IF NOT EXISTS {database};')
         self.acr_db.cur.execute(f'USE {database};')
         # create tables
-        q_bars = PublisherQuery.create_table_bars()
+        q_bars = PublisherQuery.create_bars()
         self.acr_db.cur.execute(q_bars)
 
     def insert_payload(self, query: str, payload: List[tuple]) -> None:
