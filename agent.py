@@ -100,7 +100,8 @@ class AgentAlpacaApi:
             )
             elasped_time_request = datetime.now() - time_start_request
             # wait for escape api request limit
-            time_too_early = self.request_limit_per_min - elasped_time_request.total_seconds()
+            request_limit_per_sec = (self.request_limit_per_min / 60)
+            time_too_early = request_limit_per_sec - elasped_time_request.total_seconds()
             if time_too_early > 0:
                 time.sleep(time_too_early)
             # temporary solution to the problem the return value of bars may be None.
