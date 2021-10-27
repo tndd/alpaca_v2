@@ -32,6 +32,15 @@ class AgentDB:
         q_bars = PublisherQuery.create_table_bars()
         self.acr_db.cur.execute(q_bars)
 
+    def insert_payload(self, query: str, payload: List[tuple]) -> None:
+        # split lines every 500,000 because of restriction memory limit.
+        chunk = 500000
+        lines_len = len(payload)
+        payloads_separated = [payload[i:i + chunk] for i in range(0, lines_len, chunk)]
+        for payload in payloads_separated:
+            self.acr_db.cur.executemany(query, payload)
+        self.acr_db.conn.commit()
+
 
 class TimeFrame(Enum):
     MIN_1 = '1Min'
@@ -127,7 +136,7 @@ class AgentAlpacaApi:
         return list(map(lambda bar: ((
             timeframe.value,
             symbol,
-            bar['t'],
+            datetime.strptime(bar['t'], '%Y-%m-%dT%H:%M:%SZ').strftime('%Y-%m-%d %H:%M:%S'),
             bar['o'],
             bar['h'],
             bar['l'],

@@ -45,3 +45,8 @@ class PublisherQuery:
     def create_table_bars(cls) -> str:
         path = './sql/create/bars.sql'
         return cls._load_query_from_file(path)
+
+    @classmethod
+    def insert_bars(cls) -> str:
+        path = './sql/insert/bars.sql'
+        return cls._load_query_from_file(path)

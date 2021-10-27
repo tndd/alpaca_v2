@@ -1,16 +1,20 @@
 from agent import AgentDB, AgentAlpacaApi, TimeFrame
+from assistant import PublisherQuery
 
 
 def main():
-    # agent_db = AgentDB()
+    agent_db = AgentDB()
     agent_alpaca = AgentAlpacaApi()
-    d = agent_alpaca.request_bars_payload(
+    payload = agent_alpaca.request_bars_payload(
         timeframe=TimeFrame.DAY_1,
         symbol='GLD',
         time_start='2021-10-01',
         time_end='2021-10-12'
     )
-    print(d)
+    query = PublisherQuery.insert_bars()
+    # print(payload)
+    # print(query)
+    agent_db.insert_payload(query, payload)
 
 
 if __name__ == '__main__':
