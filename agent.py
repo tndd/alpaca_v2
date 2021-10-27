@@ -36,6 +36,7 @@ class AgentDB:
         # split lines every 500,000 because of restriction memory limit.
         chunk = 500000
         lines_len = len(payload)
+        print(f"insert lines num: {lines_len}")
         payloads_separated = [payload[i:i + chunk] for i in range(0, lines_len, chunk)]
         for payload in payloads_separated:
             self.acr_db.cur.executemany(query, payload)
@@ -96,6 +97,7 @@ class AgentAlpacaApi:
     ) -> List[dict]:
         next_page_token = None
         bars_all = []
+        print(f"symbol: {symbol}, timeframe: {timeframe.value}")
         while True:
             # scice there is a limit to the number of api request.
             # so time measurement is necessary to limit the number of times sent request.
@@ -117,7 +119,9 @@ class AgentAlpacaApi:
                 bars_all.extend(bars['bars'])
             next_page_token = bars['next_page_token']
             if next_page_token is None:
+                print('request is completed.')
                 break
+            print('.', end='', flush=True)
         return bars_all
 
     def request_bars_payload(
