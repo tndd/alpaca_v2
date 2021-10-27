@@ -52,7 +52,7 @@ class AgentAlpacaApi:
             "APCA-API-KEY-ID": api_key,
             "APCA-API-SECRET-KEY": secret_key
         }
-        self.request_limit_per_min = 200
+        self.request_limit_per_sec = 3.4
 
     def request_bars_part(
         self,
@@ -100,8 +100,7 @@ class AgentAlpacaApi:
             )
             elasped_time_request = datetime.now() - time_start_request
             # wait for escape api request limit
-            request_limit_per_sec = (self.request_limit_per_min / 60)
-            time_too_early = request_limit_per_sec - elasped_time_request.total_seconds()
+            time_too_early = self.request_limit_per_sec - elasped_time_request.total_seconds()
             if time_too_early > 0:
                 time.sleep(time_too_early)
             # temporary solution to the problem the return value of bars may be None.
