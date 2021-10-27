@@ -75,7 +75,6 @@ class AgentAlpacaApi:
         )
         return r.json()
 
-
     def request_bars_all(
         self,
         timeframe: TimeFrame,
