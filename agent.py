@@ -51,7 +51,7 @@ class AgentAlpacaApi:
             "APCA-API-SECRET-KEY": secret_key
         }
 
-    def request_bars(
+    def request_bars_part(
         self,
         timeframe: TimeFrame,
         symbol: str,
@@ -75,7 +75,7 @@ class AgentAlpacaApi:
         )
         return r.json()
 
-    def request_bars_all(
+    def request_bars(
         self,
         timeframe: TimeFrame,
         symbol: str,
@@ -85,7 +85,7 @@ class AgentAlpacaApi:
         next_page_token = None
         bars_all = []
         while True:
-            bars = self.request_bars(
+            bars = self.request_bars_part(
                 timeframe,
                 symbol,
                 time_start,
