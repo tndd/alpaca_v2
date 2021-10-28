@@ -2,7 +2,7 @@ import os
 import requests
 import time
 from dotenv import load_dotenv
-from typing import List, Optional
+from typing import List, Optional, Any, Union
 from enum import Enum
 from datetime import datetime
 
@@ -41,6 +41,10 @@ class AgentDB:
         for payload in payloads_separated:
             self.acr_db.cur.executemany(query, payload)
         self.acr_db.conn.commit()
+
+    def execute(self, query: str, params: tuple) -> Union[Any, list]:
+        self.acr_db.cur.execute(query, params)
+        return self.acr_db.cur.fetchall()
 
 
 class TimeFrame(Enum):
