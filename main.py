@@ -17,8 +17,9 @@ def test_insert_payload():
 
 def main():
     agent_db = AgentDB()
-    query = PublisherQuery.select_bars_latest_time()
-    print(agent_db.execute(query, ('1Day', 'GLD'))[0][0])
+    query = PublisherQuery.select_bars_latest_times()
+    print(query)
+    print(agent_db.execute(query, ('1Day',)))
 
 
 if __name__ == '__main__':

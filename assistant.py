@@ -39,6 +39,7 @@ class PublisherQuery:
                 query = f.read()
         except IOError as e:
             print(e)
+            exit(1)
         return query
 
     @classmethod
@@ -52,6 +53,6 @@ class PublisherQuery:
         return cls._load_query_from_file(path)
 
     @classmethod
-    def select_bars_latest_time(cls) -> str:
-        path = './sql/select/bars_latest_time.sql'
+    def select_bars_latest_times(cls) -> str:
+        path = './sql/select/bars_latest_times.sql'
         return cls._load_query_from_file(path)
