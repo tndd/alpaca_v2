@@ -2,59 +2,15 @@ import os
 import requests
 import time
 from dotenv import load_dotenv
-from typing import List, Optional, Any, Union
-from enum import Enum
+from typing import List, Optional
 from datetime import datetime
 
-from assistant import AccesorDB, PublisherQuery
+from datatypes import TimeFrame
 
 load_dotenv()
 
 
-class AgentDB:
-    def __init__(
-        self,
-        user: str = os.getenv('DB_USER'),
-        passwd: str = os.getenv('DB_PASSWORD'),
-        host: str = os.getenv('DB_HOST'),
-        database: str = os.getenv('DB_NAME')
-    ) -> None:
-        # db accesor
-        self.acr_db = AccesorDB(
-            user=user,
-            passwd=passwd,
-            host=host
-        )
-        # create database & use
-        self.acr_db.cur.execute(f'CREATE DATABASE IF NOT EXISTS {database};')
-        self.acr_db.cur.execute(f'USE {database};')
-        # create tables
-        q_bars = PublisherQuery.create_bars()
-        self.acr_db.cur.execute(q_bars)
-
-    def insert_payload(self, query: str, payload: List[tuple]) -> None:
-        # split lines every 500,000 because of restriction memory limit.
-        chunk = 500000
-        lines_len = len(payload)
-        print(f"insert lines num: {lines_len}")
-        payloads_separated = [payload[i:i + chunk] for i in range(0, lines_len, chunk)]
-        for payload in payloads_separated:
-            self.acr_db.cur.executemany(query, payload)
-        self.acr_db.conn.commit()
-
-    def execute(self, query: str, params: tuple) -> Union[Any, list]:
-        self.acr_db.cur.execute(query, params)
-        return self.acr_db.cur.fetchall()
-
-
-class TimeFrame(Enum):
-    MIN_1 = '1Min'
-    MIN_15 = '15Min'
-    HOUR_1 = '1Hour'
-    DAY_1 = '1Day'
-
-
-class AgentAlpacaApi:
+class ClientAlpacaAPI:
     def __init__(
         self,
         api_key: str = os.getenv('ALPACA_API_KEY'),

@@ -1,24 +1,16 @@
-from agent import AgentDB, AgentAlpacaApi, TimeFrame
-from assistant import PublisherQuery
+from RepositoryBars import RepositoryBars
+from datatypes import TimeFrame
 
 
-def test_insert_payload():
-    agent_db = AgentDB()
-    agent_alpaca = AgentAlpacaApi()
-    payload = agent_alpaca.request_bars_payload(
+def main():
+    rp_bar = RepositoryBars()
+    # print(rp_bar.get_latest_time(symbol='GLD', timeframe=TimeFrame.DAY_1))
+    rp_bar.store_bars(
         timeframe=TimeFrame.DAY_1,
         symbol='GLD',
         time_start='2016-01-01',
         time_end='2021-10-12'
     )
-    query = PublisherQuery.insert_bars()
-    agent_db.insert_payload(query, payload)
-
-
-def main():
-    agent_db = AgentDB()
-    query = PublisherQuery.select_bars_latest_time()
-    print(agent_db.execute(query, ('1Day', 'GLD'))[0][0])
 
 
 if __name__ == '__main__':
