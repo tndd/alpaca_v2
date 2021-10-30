@@ -3,7 +3,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 from services import ClientDB, ClientAlpacaAPI, PublisherQuery
-from datatypes import TimeFrame
+from datatypes import TimeFrame, Symbol
 
 load_dotenv()
 
@@ -39,19 +39,19 @@ class RepositoryBars:
     def store_bars(
         self,
         timeframe: TimeFrame,
-        symbol :str,
+        symbol: Symbol,
         time_start: str,
         time_end: str
     ) -> None:
         payload = self.cli_alpaca.request_bars_payload(
             timeframe=timeframe.value,
-            symbol=symbol,
+            symbol=symbol.name,
             time_start=time_start,
             time_end=time_end
         )
         query = PublisherQuery.insert_bars()
         self.cli_db.insert_payload(query, payload)
 
-    def get_latest_time(self, symbol: str, timeframe: TimeFrame) -> datetime:
+    def get_latest_time(self, symbol: Symbol, timeframe: TimeFrame) -> datetime:
         query = PublisherQuery.select_bars_latest_time()
-        return self.cli_db.fetch_all(query, (timeframe.value, symbol))[0][0]
+        return self.cli_db.fetch_all(query, (timeframe.value, symbol.name))[0][0]

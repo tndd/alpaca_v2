@@ -1,5 +1,5 @@
 from RepositoryBars import RepositoryBars
-from datatypes import TimeFrame
+from datatypes import TimeFrame, Symbol
 
 
 def main():
@@ -7,7 +7,7 @@ def main():
     # print(rp_bar.get_latest_time(symbol='GLD', timeframe=TimeFrame.DAY_1))
     rp_bar.store_bars(
         timeframe=TimeFrame.DAY_1,
-        symbol='GLD',
+        symbol=Symbol.GLD,
         time_start='2016-01-01',
         time_end='2021-10-12'
     )
