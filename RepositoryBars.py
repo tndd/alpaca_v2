@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 
 from ClientDB import ClientDB
 from PublisherQuery import PublisherQuery
-from ClientAlpacaAPI import TimeFrame, ClientAlpacaAPI
+from ClientAlpacaAPI import ClientAlpacaAPI
+from datatypes import TimeFrame
 
 load_dotenv()
 
@@ -45,7 +46,7 @@ class RepositoryBars:
         time_end: str
     ) -> None:
         payload = self.cli_alpaca.request_bars_payload(
-            timeframe=timeframe,
+            timeframe=timeframe.value,
             symbol=symbol,
             time_start=time_start,
             time_end=time_end

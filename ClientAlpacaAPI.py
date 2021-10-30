@@ -4,8 +4,6 @@ from dotenv import load_dotenv
 from typing import List, Optional
 from datetime import datetime
 
-from datatypes import TimeFrame
-
 load_dotenv()
 
 
@@ -25,7 +23,7 @@ class ClientAlpacaAPI:
 
     def request_bars_part(
         self,
-        timeframe: TimeFrame,
+        timeframe: str,
         symbol: str,
         time_start: str,
         time_end: str,
@@ -35,7 +33,7 @@ class ClientAlpacaAPI:
         query = {
             'start': time_start,
             'end': time_end,
-            'timeframe': timeframe.value,
+            'timeframe': timeframe,
             'limit': 10000
         }
         if page_token is not None:
@@ -49,14 +47,14 @@ class ClientAlpacaAPI:
 
     def request_bars(
         self,
-        timeframe: TimeFrame,
+        timeframe: str,
         symbol: str,
         time_start: str,
         time_end: str,
     ) -> List[dict]:
         next_page_token = None
         bars_all = []
-        print(f"symbol: {symbol}, timeframe: {timeframe.value}")
+        print(f"symbol: {symbol}, timeframe: {timeframe}")
         while True:
             # scice there is a limit to the number of api request.
             # so time measurement is necessary to limit the number of times sent request.
@@ -85,7 +83,7 @@ class ClientAlpacaAPI:
 
     def request_bars_payload(
         self,
-        timeframe: TimeFrame,
+        timeframe: str,
         symbol: str,
         time_start: str,
         time_end: str,
@@ -97,7 +95,7 @@ class ClientAlpacaAPI:
             time_end
         )
         return list(map(lambda bar: ((
-            timeframe.value,
+            timeframe,
             symbol,
             datetime.strptime(bar['t'], '%Y-%m-%dT%H:%M:%SZ').strftime('%Y-%m-%d %H:%M:%S'),
             bar['o'],
