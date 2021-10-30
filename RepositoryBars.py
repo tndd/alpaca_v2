@@ -45,7 +45,7 @@ class RepositoryBars:
     ) -> None:
         payload = self.cli_alpaca.request_bars_payload(
             timeframe=timeframe.value,
-            symbol=symbol.name,
+            symbol=symbol.value,
             time_start=time_start,
             time_end=time_end
         )
@@ -54,4 +54,4 @@ class RepositoryBars:
 
     def get_latest_time(self, symbol: Symbol, timeframe: TimeFrame) -> datetime:
         query = PublisherQuery.select_bars_latest_time()
-        return self.cli_db.fetch_all(query, (timeframe.value, symbol.name))[0][0]
+        return self.cli_db.fetch_all(query, (timeframe.value, symbol.value))[0][0]
