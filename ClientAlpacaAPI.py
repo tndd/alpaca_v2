@@ -1,4 +1,3 @@
-import os
 import requests
 import time
 from dotenv import load_dotenv
@@ -13,9 +12,9 @@ load_dotenv()
 class ClientAlpacaAPI:
     def __init__(
         self,
-        api_key: str = os.getenv('ALPACA_API_KEY'),
-        secret_key: str = os.getenv('ALPACA_SECRET_KEY'),
-        endpoint_market_data: str = os.getenv('ALPACA_ENDPOINT_MARKET_DATA')
+        api_key: str,
+        secret_key: str,
+        endpoint_market_data: str
     ) -> None:
         self.endpoint_market_data = endpoint_market_data
         self.auth_header = {

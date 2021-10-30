@@ -15,14 +15,21 @@ class RepositoryBars:
         user: str = os.getenv('DB_USER'),
         passwd: str = os.getenv('DB_PASSWORD'),
         host: str = os.getenv('DB_HOST'),
-        database: str = os.getenv('DB_NAME')
+        database: str = os.getenv('DB_NAME'),
+        api_key: str = os.getenv('ALPACA_API_KEY'),
+        secret_key: str = os.getenv('ALPACA_SECRET_KEY'),
+        endpoint_market_data: str = os.getenv('ALPACA_ENDPOINT_MARKET_DATA')
     ) -> None:
         self.cli_db = ClientDB(
             user=user,
             passwd=passwd,
             host=host
         )
-        self.cli_alpaca = ClientAlpacaAPI()
+        self.cli_alpaca = ClientAlpacaAPI(
+            api_key=api_key,
+            secret_key=secret_key,
+            endpoint_market_data=endpoint_market_data
+        )
         # create database & use
         self.cli_db.cur.execute(f'CREATE DATABASE IF NOT EXISTS {database};')
         self.cli_db.cur.execute(f'USE {database};')
