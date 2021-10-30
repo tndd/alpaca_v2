@@ -2,9 +2,7 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 
-from ClientDB import ClientDB
-from PublisherQuery import PublisherQuery
-from ClientAlpacaAPI import ClientAlpacaAPI
+from services import ClientDB, ClientAlpacaAPI, PublisherQuery
 from datatypes import TimeFrame
 
 load_dotenv()
