@@ -52,6 +52,22 @@ class RepositoryBars:
         query = PublisherQuery.insert_bars()
         self.cli_db.insert_payload(query, payload)
 
+    def store_bars_all(
+        self,
+        timeframe: TimeFrame,
+        time_start: str,
+        time_end: str
+    ) -> None:
+        symbols_num = len(Symbol)
+        for i, symbol in enumerate(Symbol):
+            print(f"Progress: [{i + 1} / {symbols_num}]")
+            self.store_bars(
+                timeframe=timeframe,
+                symbol=symbol,
+                time_start=time_start,
+                time_end=time_end
+            )
+
     def get_latest_time(self, symbol: Symbol, timeframe: TimeFrame) -> datetime:
         query = PublisherQuery.select_bars_latest_time()
         return self.cli_db.fetch_all(query, (timeframe.value, symbol.value))[0][0]
