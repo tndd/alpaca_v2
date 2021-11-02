@@ -32,5 +32,5 @@ class PublisherQuery:
 
     @classmethod
     def select_bars_latest_time(cls) -> str:
-        path = cls._get_path(Order.INSERT, 'bars_latest_time')
+        path = cls._get_path(Order.SELECT, 'bars_latest_time')
         return cls._load_query_from_file(path)
