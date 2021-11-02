@@ -34,3 +34,8 @@ class PublisherQuery:
     def select_bars_latest_time(cls) -> str:
         path = cls._get_path(Order.SELECT, 'bars_latest_time')
         return cls._load_query_from_file(path)
+
+    @classmethod
+    def select_bars(cls) -> str:
+        path = cls._get_path(Order.SELECT, 'bars')
+        return cls._load_query_from_file(path)

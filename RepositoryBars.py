@@ -74,7 +74,7 @@ class RepositoryBars:
         return self.cli_db.fetch_all(query, (timeframe.value, symbol.value))[0][0]
 
     def get_df_bars(self, symbol: Symbol, timeframe: TimeFrame) -> pd.DataFrame:
-        query = f"select * from bars where symbol = %s and timeframe = %s;"
+        query = PublisherQuery.select_bars()
         return pd.read_sql(
             query,
             self.cli_db.conn,
