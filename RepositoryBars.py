@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -71,3 +72,7 @@ class RepositoryBars:
     def get_latest_time(self, symbol: Symbol, timeframe: TimeFrame) -> datetime:
         query = PublisherQuery.select_bars_latest_time()
         return self.cli_db.fetch_all(query, (timeframe.value, symbol.value))[0][0]
+
+    def get_df_bars(self, symbol: Symbol, timeframe: TimeFrame) -> pd.DataFrame:
+        query = f"select * from bars where symbol = '{symbol.value}' and timeframe = '{timeframe.value}';"
+        return pd.read_sql(query, self.cli_db.conn)
