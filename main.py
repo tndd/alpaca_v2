@@ -5,6 +5,7 @@ from datatypes import TimeFrame
 from datatypes.Symbol import Symbol
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import (roc_curve, auc, accuracy_score)
 
 
 def test_convert_df():
@@ -35,8 +36,13 @@ def test_decision_tree():
     df_x = df.drop('is_price_up_next', axis=1)
     df_y = df.is_price_up_next
     (train_x, test_x, train_y, test_y) = train_test_split(df_x, df_y, test_size=0.3, random_state=666)
-    clf = DecisionTreeClassifier(max_depth=5)
+    clf = DecisionTreeClassifier(max_depth=3)
     clf = clf.fit(train_x, train_y)
+    pred = clf.predict(test_x)
+    fpr, tpr, thresholds = roc_curve(test_y, pred, pos_label=1)
+    print(auc(fpr, tpr))
+    print(accuracy_score(pred, test_y))
+    # visualize
     export_graphviz(
         clf,
         out_file='tree.dot',
