@@ -15,7 +15,13 @@ def test_convert_df():
         high_bp = ((r.high - r.open) / r.open) * 10000
         low_bp = ((r.low - r.open) / r.open) * 10000
         close_bp = ((r.close - r.open) / r.open) * 10000
-        is_price_up_next = df.loc[r.Index + 1, 'close'] > df.loc[r.Index + 1, 'open']
+        # 0: up, 1: down, 2: eq
+        if df.loc[r.Index + 1, 'close'] > df.loc[r.Index + 1, 'open']:
+            is_price_up_next = 0
+        elif df.loc[r.Index + 1, 'close'] < df.loc[r.Index + 1, 'open']:
+            is_price_up_next = 1
+        else:
+            is_price_up_next = 2
         x.append([high_bp, low_bp, close_bp, r.volume, is_price_up_next])
     return pd.DataFrame(
         x,
@@ -34,7 +40,7 @@ def test_decision_tree():
     export_graphviz(
         clf,
         out_file='tree.dot',
-        class_names=['negative', 'positive'],
+        class_names=['up', 'down', 'eq'],
         feature_names=df_x.columns,
         filled=True,
         rounded=True
