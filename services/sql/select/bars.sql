@@ -10,4 +10,5 @@ select
 from bars
 where symbol = %s
     and timeframe = %s
+order by `time` asc
 ;
