@@ -1,8 +1,10 @@
+import subprocess
 import pandas as pd
 from RepositoryBars import RepositoryBars
 from datatypes import TimeFrame
 from datatypes.Symbol import Symbol
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier, export_graphviz
+from sklearn.model_selection import train_test_split
 
 
 def test_convert_df():
@@ -22,9 +24,25 @@ def test_convert_df():
     )
 
 
-def main():
+def test_decision_tree():
     df = test_convert_df()
-    print(df)
+    df_x = df.drop('is_price_up_next', axis=1)
+    df_y = df.is_price_up_next
+    (train_x, test_x, train_y, test_y) = train_test_split(df_x, df_y, test_size=0.3, random_state=666)
+    clf = DecisionTreeClassifier(max_depth=5)
+    clf = clf.fit(train_x, train_y)
+    export_graphviz(
+        clf,
+        out_file='tree.dot',
+        class_names=['negative', 'positive'],
+        feature_names=df_x.columns,
+        filled=True,
+        rounded=True
+    )
+    subprocess.call(['dot', '-Tpng', 'tree.dot', '-o', 'tree.png'])
+
+def main():
+    test_decision_tree()
 
 
 if __name__ == '__main__':
