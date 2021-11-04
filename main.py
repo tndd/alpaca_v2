@@ -36,12 +36,14 @@ def test_decision_tree():
     df_x = df.drop('is_price_up_next', axis=1)
     df_y = df.is_price_up_next
     (train_x, test_x, train_y, test_y) = train_test_split(df_x, df_y, test_size=0.3, random_state=666)
-    clf = DecisionTreeClassifier(max_depth=3)
-    clf = clf.fit(train_x, train_y)
-    pred = clf.predict(test_x)
-    fpr, tpr, thresholds = roc_curve(test_y, pred, pos_label=1)
-    print(auc(fpr, tpr))
-    print(accuracy_score(pred, test_y))
+    for i in range(1, 20):
+        clf = DecisionTreeClassifier(max_depth=i)
+        clf = clf.fit(train_x, train_y)
+        pred = clf.predict(test_x)
+        fpr, tpr, thresholds = roc_curve(test_y, pred, pos_label=1)
+        print(f'depth: {i}')
+        print(auc(fpr, tpr))
+        print(accuracy_score(pred, test_y))
     # visualize
     export_graphviz(
         clf,
