@@ -5,7 +5,6 @@ from datatypes import TimeFrame
 from datatypes.Symbol import Symbol
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import (roc_curve, auc, accuracy_score)
 
 
 def test_convert_df():
@@ -36,24 +35,23 @@ def test_decision_tree():
     df_x = df.drop('is_price_up_next', axis=1)
     df_y = df.is_price_up_next
     (train_x, test_x, train_y, test_y) = train_test_split(df_x, df_y, test_size=0.3, random_state=666)
-    for i in range(1, 20):
+    for i in range(1, 11):
         clf = DecisionTreeClassifier(max_depth=i)
         clf = clf.fit(train_x, train_y)
         pred = clf.predict(test_x)
-        fpr, tpr, thresholds = roc_curve(test_y, pred, pos_label=1)
+        accuracy = sum(pred == test_y) / len(test_y)
         print(f'depth: {i}')
-        print(auc(fpr, tpr))
-        print(accuracy_score(pred, test_y))
+        print(accuracy)
     # visualize
-    export_graphviz(
-        clf,
-        out_file='tree.dot',
-        class_names=['up', 'down', 'eq'],
-        feature_names=df_x.columns,
-        filled=True,
-        rounded=True
-    )
-    subprocess.call(['dot', '-Tpng', 'tree.dot', '-o', 'tree.png'])
+    # export_graphviz(
+    #     clf,
+    #     out_file='tree.dot',
+    #     class_names=['up', 'down', 'eq'],
+    #     feature_names=df_x.columns,
+    #     filled=True,
+    #     rounded=True
+    # )
+    # subprocess.call(['dot', '-Tpng', 'tree.dot', '-o', 'tree.png'])
 
 
 def test_store_bars():
