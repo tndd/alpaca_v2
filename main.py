@@ -55,6 +55,17 @@ def test_decision_tree():
     )
     subprocess.call(['dot', '-Tpng', 'tree.dot', '-o', 'tree.png'])
 
+
+def test_store_bars():
+    rp_bar = RepositoryBars()
+    rp_bar.store_bars(
+        timeframe=TimeFrame.MIN_1,
+        symbol=Symbol.AAPL,
+        time_start='2016-01-01',
+        time_end='2021-10-12'
+    )
+
+
 def main():
     test_decision_tree()
 
