@@ -83,7 +83,7 @@ class RepositoryBars:
 
     def get_df_bars_relative(self, symbol: Symbol, timeframe: TimeFrame) -> pd.DataFrame:
         """
-        df scheme of 'df_bars_relative'
+        Scheme of 'df_bars_relative'
         ---------------------------
         high_bp: float
             basis point of price increase from opening price to high price.
