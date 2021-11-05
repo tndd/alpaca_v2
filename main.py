@@ -9,9 +9,9 @@ from sklearn.model_selection import train_test_split
 
 def test_decision_tree():
     rp_bar = RepositoryBars()
-    df = rp_bar.get_df_bars_relative(Symbol.AAPL, TimeFrame.DAY_1)
-    df_x = df.drop('is_price_up_next', axis=1)
-    df_y = df.is_price_up_next
+    df = rp_bar.get_df_bars_close_price_movements(Symbol.AAPL, TimeFrame.DAY_1)
+    df_x = df.drop('tomorrow', axis=1)
+    df_y = df.tomorrow
     (train_x, test_x, train_y, test_y) = train_test_split(df_x, df_y, test_size=0.3, random_state=666)
     for i in range(1, 11):
         clf = DecisionTreeClassifier(max_depth=i)
@@ -21,15 +21,15 @@ def test_decision_tree():
         print(f'depth: {i}')
         print(accuracy)
     # visualize
-    # export_graphviz(
-    #     clf,
-    #     out_file='tree.dot',
-    #     class_names=['up', 'down', 'eq'],
-    #     feature_names=df_x.columns,
-    #     filled=True,
-    #     rounded=True
-    # )
-    # subprocess.call(['dot', '-Tpng', 'tree.dot', '-o', 'tree.png'])
+    export_graphviz(
+        clf,
+        out_file='tree.dot',
+        class_names=['up', 'down', 'eq'],
+        feature_names=df_x.columns,
+        filled=True,
+        rounded=True
+    )
+    subprocess.call(['dot', '-Tpng', 'tree.dot', '-o', 'tree.png'])
 
 
 def test_store_bars():
@@ -43,9 +43,7 @@ def test_store_bars():
 
 
 def main():
-    rp_bar = RepositoryBars()
-    df = rp_bar.get_df_bars_close_price_movements(Symbol.AAPL, TimeFrame.DAY_1)
-    print(df)
+    test_decision_tree()
 
 
 if __name__ == '__main__':
