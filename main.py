@@ -44,7 +44,7 @@ def test_store_bars():
 
 def main():
     rp_bar = RepositoryBars()
-    df = rp_bar.get_df_bars_relative(Symbol.AAPL, TimeFrame.DAY_1)
+    df = rp_bar.get_df_bars_close_price_movements(Symbol.AAPL, TimeFrame.DAY_1)
     print(df)
 
 
