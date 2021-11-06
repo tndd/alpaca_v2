@@ -136,6 +136,9 @@ class RepositoryBars:
             ago_{back_range}: int
                 {back_range} days ago's price movement compared to {back_range + 1} days ago.
                 [0: down, 1: up, 2: eq]
+
+            ...
+
             tomorrow: int
                 tomorrow's price movement compared to today.
                 [0: down, 1: up, 2: eq]
