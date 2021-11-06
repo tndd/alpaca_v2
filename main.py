@@ -3,7 +3,7 @@ from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.model_selection import train_test_split
 
 from datatypes import TimeFrame, Symbol
-from df_converter import get_df_bars_close_price_movements
+from data_processor import get_df_bars_close_price_movements
 from RepositoryBars import RepositoryBars
 
 
