@@ -10,7 +10,7 @@ def test_classification_tree():
         Symbol.AAPL,
         TimeFrame.DAY_1
     )
-    df = get_df_bars_close_price_movements(df_bars, back_range=6)
+    df = get_df_bars_close_price_movements(df_bars, back_range=3)
     result = classification_tree(
         df=df,
         objective_var_name='tomorrow',
