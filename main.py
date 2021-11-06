@@ -1,19 +1,19 @@
 import subprocess
-import pandas as pd
-from RepositoryBars import RepositoryBars
-from datatypes import TimeFrame
-from datatypes.Symbol import Symbol
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.model_selection import train_test_split
+
+from datatypes import TimeFrame, Symbol
+from df_converter import get_df_bars_close_price_movements
+from RepositoryBars import RepositoryBars
 
 
 def test_decision_tree():
     rp_bar = RepositoryBars()
-    df = rp_bar.get_df_bars_close_price_movements(
+    df_bars = rp_bar.get_df_bars(
         Symbol.AAPL,
-        TimeFrame.DAY_1,
-        back_range=5
+        TimeFrame.DAY_1
     )
+    df = get_df_bars_close_price_movements(df_bars, back_range=6)
     df_x = df.drop('tomorrow', axis=1)
     df_y = df.tomorrow
     (train_x, test_x, train_y, test_y) = train_test_split(df_x, df_y, test_size=0.3, random_state=666)
