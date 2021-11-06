@@ -144,10 +144,8 @@ class RepositoryBars:
         rows = []
         movements = deque(maxlen=(back_range + 1))
         # create column names of df_bars_close_price_movements
-        columns = ['today']
-        for i in range(1, (back_range + 1)):
-            columns.append(f"ago_{i}")
-        columns.append('tomorrow')
+        columns_agos = [f"ago_{i}" for i in range(1, (back_range + 1))]
+        columns = ['today'] + columns_agos + ['tomorrow']
         # make rows from df_bars
         for r in df[1:-1].itertuples():
             # explanatory variables
