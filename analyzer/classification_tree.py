@@ -26,7 +26,6 @@ def classification_tree(
         clf = clf.fit(train_x, train_y)
         pred = clf.predict(test_x)
         accuracy = sum(pred == test_y) / len(test_y)
-        print(i, accuracy)
         results[i] = accuracy
     # visualize
     export_graphviz(
