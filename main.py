@@ -43,7 +43,10 @@ def test_store_bars():
 
 
 def main():
-    test_decision_tree()
+    # test_decision_tree()
+    rp_bar = RepositoryBars()
+    df = rp_bar.get_df_bars_close_price_movements(Symbol.AAPL, TimeFrame.DAY_1, back_range=4)
+    print(df)
 
 
 if __name__ == '__main__':

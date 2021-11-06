@@ -117,27 +117,38 @@ class RepositoryBars:
             index=df[:-1].time
         )
 
-    def get_df_bars_close_price_movements(self, symbol: Symbol, timeframe: TimeFrame) -> pd.DataFrame:
+    def get_df_bars_close_price_movements(
+        self,
+        symbol: Symbol,
+        timeframe: TimeFrame,
+        back_range: int = 3
+    ) -> pd.DataFrame:
         """
+        Params
+            back_range: int
+                how many previous close price to look back on.
+        ------------------------------------------------------
+
         Scheme of 'df_bars_close_price_movements'
-        --------------------------------
-        today: int
-            today's price movement compared to 1 days ago.
-            [0: down, 1: up, 2: eq]
-        ago_1: int
-            1 days ago's price movement compared to 2 days ago.
-            [0: down, 1: up, 2: eq]
-        ago_2: int
-            SAME PATTERN AS ABOVE.
-        ago_3: int
-            SAME PATTERN AS ABOVE.
-        tomorrow: int
-            tomorrow's price movement compared to today.
-            [0: down, 1: up, 2: eq]
+            today: int
+                today's price movement compared to 1 days ago.
+                [0: down, 1: up, 2: eq]
+            ago_{back_range}: int
+                {back_range} days ago's price movement compared to {back_range + 1} days ago.
+                [0: down, 1: up, 2: eq]
+            tomorrow: int
+                tomorrow's price movement compared to today.
+                [0: down, 1: up, 2: eq]
         """
         df = self.get_df_bars(symbol, timeframe)
         rows = []
-        movements = deque(maxlen=4)
+        movements = deque(maxlen=(back_range + 1))
+        # create column names of df_bars_close_price_movements
+        columns = ['today']
+        for i in range(1, (back_range + 1)):
+            columns.append(f"ago_{i}")
+        columns.append('tomorrow')
+        # make rows from df_bars
         for r in df[1:-1].itertuples():
             # explanatory variables
             if df.loc[r.Index, 'close'] > df.loc[r.Index - 1, 'close']:
@@ -150,7 +161,7 @@ class RepositoryBars:
                 # eq
                 movements.append(2)
             # wait completion of pattern
-            if len(movements) < 4:
+            if len(movements) < (back_range + 1):
                 continue
             # objective variables
             if df.loc[r.Index + 1, 'close'] > df.loc[r.Index, 'close']:
@@ -162,9 +173,12 @@ class RepositoryBars:
             else:
                 # eq
                 movement_tomorrow = 2
-            rows.append([movements[3], movements[2], movements[1], movements[0], movement_tomorrow])
+            # append movements to rows
+            row = [movements[i] for i in reversed(range((back_range + 1)))]
+            row.append(movement_tomorrow)
+            rows.append(row)
         return pd.DataFrame(
             rows,
-            columns=['today', 'ago_1', 'ago_2', 'ago_3', 'tomorrow'],
-            index=df[4:-1].time
+            columns=columns,
+            index=df[(back_range + 1):-1].time
         )
