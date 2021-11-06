@@ -9,7 +9,11 @@ from sklearn.model_selection import train_test_split
 
 def test_decision_tree():
     rp_bar = RepositoryBars()
-    df = rp_bar.get_df_bars_close_price_movements(Symbol.AAPL, TimeFrame.DAY_1)
+    df = rp_bar.get_df_bars_close_price_movements(
+        Symbol.AAPL,
+        TimeFrame.DAY_1,
+        back_range=5
+    )
     df_x = df.drop('tomorrow', axis=1)
     df_y = df.tomorrow
     (train_x, test_x, train_y, test_y) = train_test_split(df_x, df_y, test_size=0.3, random_state=666)
@@ -43,10 +47,10 @@ def test_store_bars():
 
 
 def main():
-    # test_decision_tree()
-    rp_bar = RepositoryBars()
-    df = rp_bar.get_df_bars_close_price_movements(Symbol.AAPL, TimeFrame.DAY_1, back_range=10)
-    print(df)
+    test_decision_tree()
+    # rp_bar = RepositoryBars()
+    # df = rp_bar.get_df_bars_close_price_movements(Symbol.AAPL, TimeFrame.DAY_1, back_range=10)
+    # print(df)
 
 
 if __name__ == '__main__':
