@@ -14,7 +14,7 @@ def test_classification_tree():
     result = classification_tree(
         df=df,
         objective_var_name='tomorrow',
-        class_names=['up', 'down', 'eq'],
+        class_names=['down', 'eq', 'up'],
         depth=10
     )
     print(result)
