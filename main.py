@@ -1,5 +1,5 @@
 from datatypes import TimeFrame, Symbol
-from data_processor import get_df_bars_close_price_movements
+from data_processor import make_df_bars_close_price_movement
 from RepositoryBars import RepositoryBars
 from analyzer import classification_tree
 
@@ -10,7 +10,7 @@ def test_classification_tree():
         Symbol.AAPL,
         TimeFrame.DAY_1
     )
-    df = get_df_bars_close_price_movements(df_bars, back_range=3)
+    df = make_df_bars_close_price_movement(df_bars, back_range=3)
     result = classification_tree(
         df=df,
         objective_var_name='tomorrow',

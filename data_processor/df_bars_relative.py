@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def get_df_bars_bars_relative(df_bars: pd.DataFrame) -> pd.DataFrame:
+def make_df_bars_bars_relative(df_bars: pd.DataFrame) -> pd.DataFrame:
         """
         Scheme of 'df_bars_relative'
         ---------------------------

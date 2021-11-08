@@ -2,7 +2,7 @@ import pandas as pd
 from collections import deque
 
 
-def get_df_bars_close_price_movements(
+def make_df_bars_close_price_movement(
         df_bars: pd.DataFrame,
         back_range: int = 3
     ) -> pd.DataFrame:
