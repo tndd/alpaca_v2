@@ -20,6 +20,22 @@ def test_clf_df_bars_close_price_movement():
     print(result)
 
 
+def test_clf_df_bars_discrete():
+    rp_bar = RepositoryBars()
+    df_bars = rp_bar.get_df_bars(
+        Symbol.AAPL,
+        TimeFrame.DAY_1
+    )
+    df = make_df_bars_discrete(df_bars)
+    result = classification_tree(
+        df=df,
+        objective_var_name='r_co',
+        class_names=['big_down', 'down', 'up', 'big_up'],
+        depth=6
+    )
+    print(result)
+
+
 def test_make_df_bars_discrete():
     rp_bar = RepositoryBars()
     df_bars = rp_bar.get_df_bars(
@@ -41,7 +57,7 @@ def test_store_bars():
 
 
 def main():
-    test_make_df_bars_discrete()
+    test_clf_df_bars_discrete()
 
 
 if __name__ == '__main__':
