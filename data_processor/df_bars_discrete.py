@@ -27,5 +27,11 @@ def make_df_bars_discrete_price_movement(
                 2: 0.995 < pnr_oc <= 1.0
                 3: 1.0 < pnr_oc <= 1.005
                 4: 1.005 < pnr_oc
+        [OBJ] r_co: int
+            Ratio of now time's open price to close price.
+                1: r_co <= 0.995
+                2: 0.995 < r_co <= 1.0
+                3: 1.0 < r_co <= 1.005
+                4: 1.005 < r_co
     """
     pass
