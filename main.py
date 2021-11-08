@@ -4,7 +4,7 @@ from RepositoryBars import RepositoryBars
 from analyzer import classification_tree
 
 
-def test_classification_tree():
+def test_clf_df_bars_close_price_movement():
     rp_bar = RepositoryBars()
     df_bars = rp_bar.get_df_bars(
         Symbol.AAPL,
